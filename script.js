@@ -123,7 +123,7 @@ const startBtnClick = () => {
         duration: 2400,
         is_randomized: false,
         pass_percent: 70,
-        title: "Get Your BONUS HERE (PROFILE -> WEBSITE to have more Detail)",
+        title: "Get Your BONUS HERE (visit TheCrackingCodingInterview.com to have more Detail)",
         type: "practice-test"
     };
     var quizzBonusQues = {
