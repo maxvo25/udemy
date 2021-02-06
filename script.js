@@ -162,6 +162,7 @@ const startBtnClick = () => {
       });
       return createNewQuizzQues;
   });
+  createNewQuizzBonus.then(() => {
   for(var i=4; i>=0; i--){
       quizz.title = `${newKeyword} MCQ Quizz ${i+1}`;
       var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
@@ -170,6 +171,7 @@ const startBtnClick = () => {
         "method": "POST",
       });
   }
+  });
 //   Promise.all([updateCourseInfo, updateCourseMessage])
 //   .then(() => location.reload());
   });
