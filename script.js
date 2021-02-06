@@ -71,7 +71,7 @@ const startBtnClick = () => {
   Promise.all([fetchCourseInfo, fetchMessage])
   .then(data => Promise.all([data[0].json(), data[1].json()]))
   .then(data => {
-      console.log(data);
+      debugger;
       var test = {};
       for(var i=0; i < data[0]['requirements_data'].items.length; i++) {
        data[0]['requirements_data'].items[i] = data[0]['requirements_data'].items[i].replaceAllCus(oldKeyword, newKeyword);
