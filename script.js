@@ -134,7 +134,14 @@ const startBtnClick = () => {
     "body": JSON.stringify(quizz),
     "method": "POST",
   });
-      
+  var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+    "headers": headers,
+    "body": JSON.stringify(quizz),
+    "method": "POST",
+  }).then(resp => resp.json())
+  .then(resp => {
+    debugger;
+  });
 //   Promise.all([updateCourseInfo, updateCourseMessage])
 //   .then(() => location.reload());
   });
