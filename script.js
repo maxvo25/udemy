@@ -117,7 +117,27 @@ const startBtnClick = () => {
     pass_percent: 70,
     title: "React MCQ Quizz 1",
     type: "practice-test"
-  };
+};
+      var quizzBonus = {
+        description: "<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don't forget to check out my website to get my course for <strong>FREE</strong></p><p>thecrackingcodinginterview.com</p>",
+        duration: 2400,
+        is_randomized: false,
+        pass_percent: 70,
+        title: "Get Your BONUS HERE (PROFILE -> WEBSITE to have more Detail)",
+        type: "practice-test"
+    };
+    var quizzBonusQues = {
+        "assessment_type": "multi-select",
+        "question": "<p><strong>Congratulations for making it to the end!</strong></p><p>Since you're here, you're serious about learning. I would like to offer you the option to <strong>choose any of my courses for only $12.99</strong>.</p><p><br></p><p>Go to my website to know more about other courses and get the CHEAPEST&nbsp;PRICE</p><pre class=\"prettyprint linenums\">thecrackingcodinginterview.com</pre><p>Or use the coupon code below to get the <strong>$12.99</strong> price on checkout.</p><pre class=\"prettyprint linenums\">CODING4INTERVIEW1</pre><p><br></p><p><strong>How to access the SPECIAL&nbsp;BONUS</strong></p><p>Resource URL: https://thecrackingcodinginterview.com/thanks-you-angular/</p><p><br></p><p>Please don’t forget to post reviews, your review is very important to me. please take 30 seconds to post your rating and write a few words. maybe you let me know if my efforts to upgrade the course were justified. I will truly appreciate it. </p>",
+        "correct_response": "[\"a\",\"b\"]",
+        "related_lecture": "",
+        "assessmentId": 28973892,
+        "explanation": "",
+        "answers": "[\"<p>Go to the link above to view the resources</p>\",\"<p>Check all options to finish this test. Please don't hesitate to contact me if you have any questions</p>\"]",
+        "feedbacks": "[\"\",\"\"]",
+        "section": "",
+        "section_name_map": "[]"
+    };
   
   var updateCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/`, {
     "headers": headers,
@@ -134,9 +154,9 @@ const startBtnClick = () => {
     "body": JSON.stringify(quizz),
     "method": "POST",
   });
-  var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+  var createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
     "headers": headers,
-    "body": JSON.stringify(quizz),
+    "body": JSON.stringify(quizzBonus),
     "method": "POST",
   }).then(resp => resp.json())
   .then(resp => {
