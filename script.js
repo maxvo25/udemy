@@ -73,7 +73,6 @@ const startBtnClick = () => {
   .then(data => {
       console.log(data);
       var test = {};
-      // [...data[0]['requirements_data'].items, ...data[0]['what_you_will_learn_data'].items, ...data[0]['who_should_attend_data'].items].forEach(item => item.replaceAll(oldKeyword, newKeyword));
       for(var i=0; i < data[0]['requirements_data'].items.length; i++) {
        data[0]['requirements_data'].items[i] = data[0]['requirements_data'].items[i].replaceAllCus(oldKeyword, newKeyword);
       }
@@ -111,7 +110,15 @@ const startBtnClick = () => {
       };
       var message = [welcome, complete];
       
-      
+  var quizz = {
+    description: "<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don't forget to check out my website to get my course for <strong>FREE</strong></p><p>thecrackingcodinginterview.com</p>",
+    duration: 2400,
+    is_randomized: false,
+    pass_percent: 70,
+    title: "React MCQ Quizz 1",
+    type: "practice-test"
+  };
+  
   var updateCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/`, {
     "headers": headers,
     "body": JSON.stringify(test),
@@ -122,6 +129,12 @@ const startBtnClick = () => {
     "body": JSON.stringify(message),
     "method": "POST",
   });
+  var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+    "headers": headers,
+    "body": JSON.stringify(message),
+    "method": "POST",
+  });
+      
   Promise.all([updateCourseInfo, updateCourseMessage])
   .then(() => location.reload());
   });
