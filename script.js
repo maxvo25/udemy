@@ -135,8 +135,8 @@ const startBtnClick = () => {
     "method": "POST",
   });
       
-  Promise.all([updateCourseInfo, updateCourseMessage])
-  .then(() => location.reload());
+//   Promise.all([updateCourseInfo, updateCourseMessage])
+//   .then(() => location.reload());
   });
 }
 $(document).on('click', '#startBtn', startBtnClick);  
