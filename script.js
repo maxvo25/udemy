@@ -111,7 +111,7 @@ const startBtnClick = () => {
       var message = [welcome, complete];
       
   var quizz = {
-    description: "<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don't forget to check out my website to get my course for <strong>FREE</strong></p><input type="button" value="button name" onclick="window.open('http://www.website.com/page')" />",
+    description: `<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don't forget to check out my website to get my course for <strong>FREE</strong></p><input type='button' value='button name' onclick='window.open("http://www.website.com/page")' />`,
     duration: 2400,
     is_randomized: false,
     pass_percent: 70,
