@@ -148,18 +148,13 @@ const startBtnClick = () => {
     "body": JSON.stringify(message),
     "method": "POST",
   });
-  var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
-    "headers": headers,
-    "body": JSON.stringify(quizz),
-    "method": "POST",
-  });
+
   var createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
     "headers": headers,
     "body": JSON.stringify(quizzBonus),
     "method": "POST",
   }).then(resp => resp.json())
   .then(resp => {
-    debugger;
       var createNewQuizzQues = fetch(`https://www.udemy.com/api-2.0/quizzes/${resp.id}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
         "headers": headers,
         "body": JSON.stringify(quizzBonusQues),
@@ -167,6 +162,14 @@ const startBtnClick = () => {
       });
       return createNewQuizzQues;
   });
+  for(var i=4; i>=0; i--){
+      quizz.title = `${newKeyword} MCQ Quizz ${i+1}`;
+      var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+        "headers": headers,
+        "body": JSON.stringify(quizz),
+        "method": "POST",
+      });
+  }
 //   Promise.all([updateCourseInfo, updateCourseMessage])
 //   .then(() => location.reload());
   });
