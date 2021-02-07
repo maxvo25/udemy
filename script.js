@@ -176,7 +176,7 @@ const startBtnClick = () => {
       });
       promises.push(createNewQuizzBonus);
   }
-  Promise.all([updateCourseInfo, updateCourseMessage])
+  Promise.all(promises)
   .then(() => location.reload());
   });
 }
