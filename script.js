@@ -171,7 +171,7 @@ const startBtnClick = () => {
                         });
                         subpromises.push(createNewQuizz);
                     }
-                    return promise.all(subpromises);
+                    return Promise.all(subpromises);
                 });
                 promises.push(createNewQuizzBonus);
             }
