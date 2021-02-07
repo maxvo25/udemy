@@ -115,7 +115,6 @@ const startBtnClick = () => {
     duration: 2400,
     is_randomized: false,
     pass_percent: 70,
-    title: "React MCQ Quizz 1",
     type: "practice-test"
 };
       var quizzBonus = {
@@ -139,27 +138,9 @@ const startBtnClick = () => {
     };
   
   var updateCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/`, {
-  "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7,fr-FR;q=0.6,fr;q=0.5,zh-TW;q=0.4,zh;q=0.3",
-    "authorization": "Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO",
-    "cache-control": "no-cache",
-    "content-type": "application/json;charset=UTF-8",
-    "pragma": "no-cache",
-    "sec-ch-ua": "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-origin",
-    "x-requested-with": "XMLHttpRequest",
-    "x-udemy-authorization": "Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO"
-  },
-  "referrer": "https://www.udemy.com/instructor/course/3587352/manage/goals",
-  "referrerPolicy": "strict-origin-when-cross-origin",
+  "headers": headers,
   "body": JSON.stringify(test),
   "method": "PATCH",
-  "mode": "cors",
-  "credentials": "include"
   });
   var updateCourseMessage = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/course-messages/`, {
     "headers": headers,
@@ -183,7 +164,7 @@ const startBtnClick = () => {
   });
   createNewQuizzBonus.then(() => {
   for(var i=4; i>=0; i--){
-      quizz.title = `${newKeyword} MCQ Quizz ${i+1}`;
+      quizz.title = `${newKeyword} MCQ Quizz`;
       var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
         "headers": headers,
         "body": JSON.stringify(quizz),
@@ -191,8 +172,8 @@ const startBtnClick = () => {
       });
   }
   });
-//   Promise.all([updateCourseInfo, updateCourseMessage])
-//   .then(() => location.reload());
+  Promise.all([updateCourseInfo, updateCourseMessage])
+  .then(() => location.reload());
   });
 }
 $(document).on('click', '#startBtn', startBtnClick);  
