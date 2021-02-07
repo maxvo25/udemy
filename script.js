@@ -126,6 +126,11 @@ const startBtnClick = () => {
       };
       const message = [welcome, complete];
 
+      const coursePromotion = {
+        'code': "CODING4INTERVIEW1",
+        'discount_strategy': "long_discount",
+        'discount_value': 12.99
+      };
       const quizz = {
         description: '<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don\'t forget to check out my website to get my course for <strong>FREE</strong></p><p>TheCrackingCodingInterview.com</p>',
         duration: 2400,
@@ -163,7 +168,12 @@ const startBtnClick = () => {
         body: JSON.stringify(message),
         method: 'POST',
       });
-      const promises = [updateCourseInfo, updateCourseMessage];
+      const updateCoursePromotion = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/coupons-v2/`, {
+        headers,
+        body: JSON.stringify(coursePromotion),
+        method: 'POST',
+      });
+      const promises = [updateCourseInfo, updateCourseMessage, updateCoursePromotion];
       if (isCreateTestTemplate) {
         const createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
           headers,
@@ -201,18 +211,22 @@ const updateQuesBtn = () => {
   const targetDatabase = $('#targetDatabase').val();
   const targetQuizz = $('#targetQuizz').val();
   const step = Math.round(root[targetDatabase].length / targetQuizz.length);
+  var promises = [];
   for (let i = 0; i < targetQuizz.length; i++) {
     
     var j = i * step;
     var max = (i + 1) * step;
     for (; j < max; j++) {
-      fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz[i]}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+      var promise = fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz[i]}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
         headers,
         body: JSON.stringify(root[targetDatabase][j]),
         method: 'POST',
       });
+      promises.push(promise);
     }
   }
+  Promise.all(promises)
+  .then(() => location.reload());
 };
 
 function showUpdateQuestions(){
