@@ -178,8 +178,7 @@ const startBtnClick = () => {
   }
   setTimeout(() => {
     alert('done');
-  }, 5000)
-      );
+  }, 5000);
 }
 $(document).on('click', '#startBtn', startBtnClick);  
 
