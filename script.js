@@ -176,7 +176,7 @@ const startBtnClick = () => {
                 promises.push(createNewQuizzBonus);
             }
             Promise.all(promises)
-                .then(() => alert('done'));
+                .then(() => location.reload());
         });
 };
 $(document).on('click', '#startBtn', startBtnClick);
