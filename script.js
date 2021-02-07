@@ -209,7 +209,7 @@ const updateQuesBtn = () => {
     };
     var resetQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized`, {
       headers,
-      "body": post,
+      "body": JSON.stringify(post),
       "method": "POST",
     });
     post = {
@@ -217,7 +217,7 @@ const updateQuesBtn = () => {
     };
     var emptyQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/${targetQuizz[i]}/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
       headers,
-      "body": post,
+      "body": JSON.stringify(post),
       "method": "PATCH",
     });
     
