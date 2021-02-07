@@ -71,7 +71,6 @@ const startBtnClick = () => {
   Promise.all([fetchCourseInfo, fetchMessage])
   .then(data => Promise.all([data[0].json(), data[1].json()]))
   .then(data => {
-      debugger;
       var test = {};
       for(var i=0; i < data[0]['requirements_data'].items.length; i++) {
        data[0]['requirements_data'].items[i] = data[0]['requirements_data'].items[i].replaceAllCus(oldKeyword, newKeyword);
@@ -147,31 +146,35 @@ const startBtnClick = () => {
     "body": JSON.stringify(message),
     "method": "POST",
   });
-
-  var createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
-    "headers": headers,
-    "body": JSON.stringify(quizzBonus),
-    "method": "POST",
-  }).then(resp => resp.json())
-  .then(resp => {
-      debugger;
-      var createNewQuizzQues = fetch(`https://www.udemy.com/api-2.0/quizzes/${resp.id}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+  var promises = [updateCourseInfo, updateCourseMessage];
+  if(isCreateTestTemplate.val()){
+      var createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
         "headers": headers,
-        "body": JSON.stringify(quizzBonusQues),
+        "body": JSON.stringify(quizzBonus),
         "method": "POST",
+      }).then(resp => resp.json())
+      .then(resp => {
+          var createNewQuizzQues = fetch(`https://www.udemy.com/api-2.0/quizzes/${resp.id}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+            "headers": headers,
+            "body": JSON.stringify(quizzBonusQues),
+            "method": "POST",
+          });
+          return createNewQuizzQues;
       });
-      return createNewQuizzQues;
-  });
-  createNewQuizzBonus.then(() => {
-  for(var i=4; i>=0; i--){
-      quizz.title = `${newKeyword} MCQ Quizz`;
-      var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
-        "headers": headers,
-        "body": JSON.stringify(quizz),
-        "method": "POST",
+      createNewQuizzBonus.then(() => {
+          var subpromises = [];
+          for(var i=4; i>=0; i--){
+              quizz.title = `${newKeyword} MCQ Quizz`;
+              var createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+                "headers": headers,
+                "body": JSON.stringify(quizz),
+                "method": "POST",
+              });
+              subpromises.push(createNewQuizz);
+          }
       });
+      createNewQuizzBonus.push(createNewQuizzBonus);
   }
-  });
   Promise.all([updateCourseInfo, updateCourseMessage])
   .then(() => location.reload());
   });
