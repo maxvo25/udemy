@@ -176,9 +176,9 @@ const startBtnClick = () => {
       });
       promises.push(createNewQuizzBonus);
   }
-  Promise.all(promises)
-  .then(() => location.reload());
-  });
+  setTimeout(() => {
+    alert('done');
+  }, 5000);
 }
 $(document).on('click', '#startBtn', startBtnClick);  
 
