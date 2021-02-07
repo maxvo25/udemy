@@ -172,8 +172,9 @@ const startBtnClick = () => {
               });
               subpromises.push(createNewQuizz);
           }
+          return promise.all(subpromises);
       });
-      createNewQuizzBonus.push(createNewQuizzBonus);
+      promises.push(createNewQuizzBonus);
   }
   Promise.all([updateCourseInfo, updateCourseMessage])
   .then(() => location.reload());
