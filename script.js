@@ -21,6 +21,22 @@ var rootRef = firebase.database().ref();
 var root = {};
 rootRef.once('value', (snapshot) => {
   root = snapshot.val();
+var $button = $(`
+    <form>
+      <label for='targetDatabase'>Choose Database: </label>
+      <select id='targetDatabase' name='targetDatabase' multiple>
+         ${Object.keys(root).map(datab => '<option value="' + datab + '">' + datab + '</option>').join('')}
+      </select>
+      <label for='targetQuizz'>Choose Quizz: </label>
+      <select id='targetQuizz' name='targetQuizz' multiple>
+         ${resp[1].results.map(quizz => '<option value="' + quizz.id + '">' + quizz.title + '</option>').join('')}
+      </select>
+      
+    </form>
+<button id='updateQuesBtn'>Update Questions</button>
+    `);
+                $('#updateQuesBtn').after($button);
+        });
 });
 
 var headers = {
@@ -49,19 +65,10 @@ if (isInCoursePage) {
       <select id='targetCourse' name='targetCourse'>
         ${resp[0].results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
       </select>
-      <label for='targetDatabase'>Choose Database: </label>
-      <select id='targetDatabase' name='targetDatabase' multiple>
-         ${Object.keys(root).map(datab => '<option value="' + datab + '">' + datab + '</option>').join('')}
-      </select>
-      <label for='targetQuizz'>Choose Quizz: </label>
-      <select id='targetQuizz' name='targetQuizz' multiple>
-         ${resp[1].results.map(quizz => '<option value="' + quizz.id + '">' + quizz.title + '</option>').join('')}
-      </select>
       <label for='isCreateTestTemplate'>Create Test Template </label>
       <input id='isCreateTestTemplate' type='checkbox'/>
     </form>
     <button id='startBtn'>Start Clone</button>
-<button id='updateQuesBtn'>Update Questions</button>
     `);
             setTimeout(function() {
                 $('.full-page-takeover-header--header--yZv70').after($button);
