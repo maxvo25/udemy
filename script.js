@@ -203,11 +203,18 @@ const updateQuesBtn = () => {
   const targetQuizz = $('#targetQuizz').val();
   const step = Math.round(root[targetDatabase].length / targetQuizz.length);
   for (let i = 0; i < targetQuizz.length; i++) {
-    fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized`, {
+    var resetQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized`, {
       headers,
       "body": `{"quiz_id":${targetQuizz[i]},"draft_action":"create"}`,
       "method": "POST",
-    }).then(() => {
+    });
+    var emptyQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/${targetQuizz[i]}/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+      headers,
+      "body": `{"bulk_question_file":"{\"id\":0,\"key\":\"e3ca5c07-9965-4309-962b-254030b130d5.csv\",\"uuid\":\"e3ca5c07-9965-4309-962b-254030b130d5\",\"name\":\"tttttt.csv\",\"bucket\":\"udemy-web-upload-transitional\"}"}`,
+      "method": "PATCH",
+    });
+    
+    Promise.all([resetQuizz, emptyQuizz]).then(() => {
     var j = i * step;
     var max = (i + 1) * step;
     for (; j < max; j++) {
