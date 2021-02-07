@@ -21,6 +21,10 @@ var rootRef = firebase.database().ref();
 var root = {};
 rootRef.once('value', (snapshot) => {
   root = snapshot.val();
+        var getCurriculum = fetch('https://www.udemy.com/api-2.0/courses/3584966/instructor-curriculum-items/?page_size=1400&fields[chapter]=title,description,object_index&fields[lecture]=asset,title,is_published,description,is_downloadable,is_free,object_index,supplementary_assets&fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments&fields[practice]=title,is_published,object_index&fields[asset]=created,asset_type,content_summary,time_estimation,status,source_url,thumbnail_url,title,processing_errors,delayed_asset_message,body', {
+            "headers": headers
+        });
+    
 var $button = $(`
     <form>
       <label for='targetDatabase'>Choose Database: </label>
@@ -36,7 +40,7 @@ var $button = $(`
 <button id='updateQuesBtn'>Update Questions</button>
     `);
                 $('#updateQuesBtn').after($button);
-        });
+        );
 });
 
 var headers = {
