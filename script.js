@@ -47,11 +47,11 @@ if (isInCoursePage) {
       <input id='newKeyword'  type='text' placeholder='Input New Key Word' />
       <label for='targetCourse'>Choose Course: </label>
       <select id='targetCourse' name='targetCourse'>
-        ${resp.results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
+        ${resp[0].results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
       </select>
       <label for='targetQuizz'>Choose Quizz: </label>
       <select id='targetQuizz' name='targetQuizz' multiple>
-         ${resp.results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
+         ${resp[1].results.map(quizz => '<option value="' + quizz.id + '">' + quizz.title + '</option>').join('')}
       </select>
       <label for='isCreateTestTemplate'>Create Test Template </label>
       <input id='isCreateTestTemplate' type='checkbox'/>
