@@ -198,30 +198,11 @@ const startBtnClick = () => {
     });
 };
 const updateQuesBtn = () => {
-  debugger;
   const targetDatabase = $('#targetDatabase').val();
   const targetQuizz = $('#targetQuizz').val();
   const step = Math.round(root[targetDatabase].length / targetQuizz.length);
   for (let i = 0; i < targetQuizz.length; i++) {
-    var post = {
-      'draft_action': "create",
-      'quiz_id': targetQuizz[i]
-    };
-    var resetQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized`, {
-      headers,
-      "body": JSON.stringify(post),
-      "method": "POST",
-    });
-    post = {
-      'bulk_question_file': `{"id":0,"key":"89819a4e-c757-4cf3-aed2-75a8b4beef1c.csv","uuid":"89819a4e-c757-4cf3-aed2-75a8b4beef1c","name":"tttttt.csv","bucket":"udemy-web-upload-transitional"}`
-    };
-    var emptyQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/${targetQuizz[i]}/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
-      headers,
-      "body": JSON.stringify(post),
-      "method": "PATCH",
-    });
     
-    Promise.all([resetQuizz, emptyQuizz]).then(() => {
     var j = i * step;
     var max = (i + 1) * step;
     for (; j < max; j++) {
@@ -231,7 +212,6 @@ const updateQuesBtn = () => {
         method: 'POST',
       });
     }
-    });
   }
 };
 
