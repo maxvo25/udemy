@@ -203,10 +203,10 @@ const updateQuesBtn = () => {
   const targetQuizz = $('#targetQuizz').val();
   const step = Math.round(root[targetDatabase].length / targetQuizz.length);
   for (let i = 0; i < targetQuizz.length; i++) {
-    fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/${targetQuizz[i]}/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+    fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized`, {
       headers,
-      "body": "{\"bulk_question_file\":\"{\\\"id\\\":0,\\\"key\\\":\\\"c4d31242-84b7-4bcc-9c37-220721fd0673.csv\\\",\\\"uuid\\\":\\\"c4d31242-84b7-4bcc-9c37-220721fd0673\\\",\\\"name\\\":\\\"tttttt.csv\\\",\\\"bucket\\\":\\\"udemy-web-upload-transitional\\\"}\"}",
-      "method": "PATCH",
+      "body": `{"quiz_id":${targetQuizz[i]},"draft_action":"create"}`,
+      "method": "POST",
     }).then(() => {
     var j = i * step;
     var max = (i + 1) * step;
