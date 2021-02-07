@@ -29,7 +29,7 @@ rootRef.once('value', (snapshot) => {
   const $button = $(`
     <form>
       <label for='targetDatabase'>Choose Database: </label>
-      <select id='targetDatabase' name='targetDatabase' multiple>
+      <select id='targetDatabase' name='targetDatabase'>
          ${Object.keys(root).map((datab) => `<option value="${datab}">${datab}</option>`).join('')}
       </select>
       <label for='targetQuizz'>Choose Quizz: </label>
@@ -223,31 +223,15 @@ const updateQuesBtn = () => {
   debugger;
   const targetDatabase = $('#targetDatabase').val();
   const targetQuizz = $('#targetQuizz').val();
+  const step = Math.round(root[targetDatabase].length / targetQuizz.length);
   for (let i = 0; i < targetQuizz.length; i++) {
-    const step = Math.round(root[targetDatabase] / targetQuizz.length);
-    for (let j = 0; j < step; j++) {
-      fetch('https://www.udemy.com/api-2.0/quizzes/5145776/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section', {
-        headers: {
-          accept: 'application/json, text/plain, */*',
-          'accept-language': 'en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7,fr-FR;q=0.6,fr;q=0.5,zh-TW;q=0.4,zh;q=0.3',
-          authorization: 'Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO',
-          'cache-control': 'no-cache',
-          'content-type': 'application/json;charset=UTF-8',
-          pragma: 'no-cache',
-          'sec-ch-ua': '"Chromium";v="88", "Google Chrome";v="88", ";Not A Brand";v="99"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-fetch-dest': 'empty',
-          'sec-fetch-mode': 'cors',
-          'sec-fetch-site': 'same-origin',
-          'x-requested-with': 'XMLHttpRequest',
-          'x-udemy-authorization': 'Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO',
-        },
-        referrer: 'https://www.udemy.com/instructor/course/3584966/manage/practice-tests/',
-        referrerPolicy: 'strict-origin-when-cross-origin',
-        body: JSON.stringify(childData[i]),
+    var j = i * step;
+    var max = (i + 1) * step;
+    for (; j < max; j++) {
+      fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz[i]}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+        headers,
+        body: JSON.stringify(root[targetDatabase][j]),
         method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
       });
     }
   }
