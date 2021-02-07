@@ -49,6 +49,10 @@ if (isInCoursePage) {
       <select id='targetCourse' name='targetCourse'>
         ${resp[0].results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
       </select>
+      <label for='targetDatabase'>Choose Database: </label>
+      <select id='targetDatabase' name='targetDatabase' multiple>
+         ${Object.keys(root).map(datab => '<option value="' + datab + '">' + datab + '</option>').join('')}
+      </select>
       <label for='targetQuizz'>Choose Quizz: </label>
       <select id='targetQuizz' name='targetQuizz' multiple>
          ${resp[1].results.map(quizz => '<option value="' + quizz.id + '">' + quizz.title + '</option>').join('')}
@@ -209,6 +213,11 @@ const startBtnClick = () => {
 };
 const updateQuesBtn = () => {
     debugger;
+    var targetDatabase = $('#targetDatabase').val(),
+        targetQuizz = $('#targetQuizz').val();
+    for(var i=0; i<targetQuizz.length; i++){
+        var step = Math.round(root[targetDatabase] / targetQuizz.length);
+        for(var j=0; j<step; j++){
 fetch("https://www.udemy.com/api-2.0/quizzes/5145776/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section", {
       "headers": {
         "accept": "application/json, text/plain, */*",
@@ -232,6 +241,8 @@ fetch("https://www.udemy.com/api-2.0/quizzes/5145776/assessments/?draft=false&fi
       "mode": "cors",
       "credentials": "include"
     });
+        }
+    }
 }
 $(document).on('click', '#startBtn', startBtnClick);
 $(document).on('click', '#updateQuesBtn', updateQuesBtn);
