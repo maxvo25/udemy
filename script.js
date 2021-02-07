@@ -14,6 +14,55 @@ var headers = {
 };
 var isInCoursePage = /\/course\/\d+/.test(location.href);
 if (isInCoursePage) {
+    
+  var firebaseConfig = {
+    apiKey: "AIzaSyBcySsX7lODvhK8Z3C4mtzBMdxmVi5tq_0",
+    authDomain: "udemy-7c82a.firebaseapp.com",
+    databaseURL: "https://udemy-7c82a-default-rtdb.firebaseio.com",
+    projectId: "udemy-7c82a",
+    storageBucket: "udemy-7c82a.appspot.com",
+    messagingSenderId: "606224019623",
+    appId: "1:606224019623:web:d12b41b4b2c0dec05c2b82",
+    measurementId: "G-R8WP4KJ4JM"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+var rootRef = firebase.database().ref();
+rootRef.once('value', (snapshot) => {
+  debugger;
+  snapshot.forEach((childSnapshot) => {
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
+    for(var i=0; i<childData.length; i++)
+    fetch("https://www.udemy.com/api-2.0/quizzes/5145776/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section", {
+      "headers": {
+        "accept": "application/json, text/plain, */*",
+        "accept-language": "en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7,fr-FR;q=0.6,fr;q=0.5,zh-TW;q=0.4,zh;q=0.3",
+        "authorization": "Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO",
+        "cache-control": "no-cache",
+        "content-type": "application/json;charset=UTF-8",
+        "pragma": "no-cache",
+        "sec-ch-ua": "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "x-requested-with": "XMLHttpRequest",
+        "x-udemy-authorization": "Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO"
+      },
+      "referrer": "https://www.udemy.com/instructor/course/3584966/manage/practice-tests/",
+      "referrerPolicy": "strict-origin-when-cross-origin",
+      "body": JSON.stringify(childData[i]),
+      "method": "POST",
+      "mode": "cors",
+      "credentials": "include"
+    });
+  });
+});
+
+
+
     fetch('https://www.udemy.com/api-2.0/users/me/taught-courses/?page=1&page_size=100&ordering=-created&skip_caching=true&fields[course]=title', {
             "headers": headers
         }).then(resp => resp.json())
@@ -25,6 +74,13 @@ if (isInCoursePage) {
       <label for='targetCourse'>Choose Course: </label>
       <select id='targetCourse' name='targetCourse'>
         ${resp.results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
+      </select>
+      <label for='targetQuizz'>Choose Quizz: </label>
+      <select id='targetQuizz' name='targetQuizz' multiple>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+//         ${resp.results.map(course => '<option value="' + course.id + '">' + course.title + '</option>').join('')}
       </select>
       <label for='isCreateTestTemplate'>Create Test Template </label>
       <input id='isCreateTestTemplate' type='checkbox'/>
