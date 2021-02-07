@@ -40,7 +40,7 @@ rootRef.once('value', (snapshot) => {
     </form>
 <button id='updateQuesBtn'>Update Questions</button>
     `);
-  $('#updateQuesBtn').after($button);
+  $('#startBtn').after($button);
   });
 });
 
