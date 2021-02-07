@@ -26,7 +26,7 @@ rootRef.once('value', (snapshot) => {
     headers,
   });
   getCurriculum.then(resp => resp.json())
-  .then(resp =>
+  .then(resp => {
   const $button = $(`
     <form>
       <label for='targetDatabase'>Choose Database: </label>
@@ -42,7 +42,7 @@ rootRef.once('value', (snapshot) => {
 <button id='updateQuesBtn'>Update Questions</button>
     `);
   $('#updateQuesBtn').after($button);
-);
+  });
 });
 
 var headers = {
