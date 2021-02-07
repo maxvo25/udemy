@@ -147,7 +147,7 @@ const startBtnClick = () => {
     "method": "POST",
   });
   var promises = [updateCourseInfo, updateCourseMessage];
-  if(isCreateTestTemplate.val()){
+  if(isCreateTestTemplate){
       var createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
         "headers": headers,
         "body": JSON.stringify(quizzBonus),
