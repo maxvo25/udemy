@@ -241,7 +241,7 @@ rootRef.once('value', (snapshot) => {
     <form>
       <label for='targetDatabase'>Choose Database: </label>
       <select id='targetDatabase' name='targetDatabase'>
-         ${Object.keys(root).map((datab) => `<option value="${datab}">${datab + ' - ' + root[targetDatabase].length + ' Questions'}</option>`).join('')}
+         ${Object.keys(root).map((datab) => `<option value="${datab}">${datab + ' - ' + root[datab].length + ' Questions'}</option>`).join('')}
       </select>
       <label for='targetQuizz'>Choose Quizz: </label>
       <select id='targetQuizz' name='targetQuizz' multiple>
