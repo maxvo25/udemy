@@ -38,7 +38,7 @@ if (isInCoursePage) {
     var getAuthor = fetch('https://www.udemy.com/api-2.0/users/me/taught-courses/?page=1&page_size=100&ordering=-created&skip_caching=true&fields[course]=title', {
             "headers": headers
         });
-    Promise.all([getAuthor, getCurriculum]).then((resp, resp1) => [resp.json(), resp1.json()])
+    Promise.all([getAuthor, getCurriculum]).then((resp, resp1) => {debugger; return [resp.json(), resp1.json()]})
         .then((resp, resp1) => {
         debugger;
             var $button = $(`
