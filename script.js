@@ -85,7 +85,7 @@ rootRef.once('value', (snapshot) => {
       <label for='isCreateTestTemplate'>Create Test Template </label>
       <input id='isCreateTestTemplate' type='checkbox'/>
     </form>
-    <button id='startBtn'>Start</button>
+    <button id='startBtn'>Start Clone</button>
     `);
             setTimeout(function() {
                 $('.full-page-takeover-header--header--yZv70').after($button);
