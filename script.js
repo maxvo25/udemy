@@ -18,31 +18,8 @@ const firebaseConfig = {
   // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const rootRef = firebase.database().ref();
+var courseId = -1;
 let root = {};
-rootRef.once('value', (snapshot) => {
-  root = snapshot.val();
-  const getCurriculum = fetch('https://www.udemy.com/api-2.0/courses/3584966/instructor-curriculum-items/?page_size=1400&fields[chapter]=title,description,object_index&fields[lecture]=asset,title,is_published,description,is_downloadable,is_free,object_index,supplementary_assets&fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments&fields[practice]=title,is_published,object_index&fields[asset]=created,asset_type,content_summary,time_estimation,status,source_url,thumbnail_url,title,processing_errors,delayed_asset_message,body', {
-    headers,
-  });
-  getCurriculum.then(resp => resp.json())
-  .then(resp => {
-  const $button = $(`
-    <form>
-      <label for='targetDatabase'>Choose Database: </label>
-      <select id='targetDatabase' name='targetDatabase'>
-         ${Object.keys(root).map((datab) => `<option value="${datab}">${datab}</option>`).join('')}
-      </select>
-      <label for='targetQuizz'>Choose Quizz: </label>
-      <select id='targetQuizz' name='targetQuizz' multiple>
-         ${resp.results.map((quizz) => `<option value="${quizz.id}">${quizz.title}</option>`).join('')}
-      </select>
-      
-    </form>
-<button id='updateQuesBtn'>Update Questions</button>
-    `);
-  $('.full-page-takeover-header--header--yZv70').after($button);
-  });
-});
 
 var headers = {
   accept: 'application/json, text/plain, */*',
@@ -53,6 +30,8 @@ var headers = {
 };
 const isInCoursePage = /\/course\/\d+/.test(location.href);
 if (isInCoursePage) {
+  courseId = window.location.href.match(/(\d)+/)[0];
+  showUpdateQuestions();
   const getAuthor = fetch('https://www.udemy.com/api-2.0/users/me/taught-courses/?page=1&page_size=100&ordering=-created&skip_caching=true&fields[course]=title', {
     headers,
   });
@@ -100,7 +79,6 @@ const startBtnClick = () => {
   const oldKeyword = $('#oldKeyword').val();
   const newKeyword = $('#newKeyword').val();
   const isCreateTestTemplate = $('#isCreateTestTemplate').is(':checked');
-  const courseId = window.location.href.match(/(\d)+/)[0];
   const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
   });
@@ -225,6 +203,11 @@ const updateQuesBtn = () => {
   const targetQuizz = $('#targetQuizz').val();
   const step = Math.round(root[targetDatabase].length / targetQuizz.length);
   for (let i = 0; i < targetQuizz.length; i++) {
+    fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/${targetQuizz[i]}/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+      headers,
+      "body": "{\"bulk_question_file\":\"{\\\"id\\\":0,\\\"key\\\":\\\"c4d31242-84b7-4bcc-9c37-220721fd0673.csv\\\",\\\"uuid\\\":\\\"c4d31242-84b7-4bcc-9c37-220721fd0673\\\",\\\"name\\\":\\\"tttttt.csv\\\",\\\"bucket\\\":\\\"udemy-web-upload-transitional\\\"}\"}",
+      "method": "PATCH",
+    }).then(() => {
     var j = i * step;
     var max = (i + 1) * step;
     for (; j < max; j++) {
@@ -234,7 +217,35 @@ const updateQuesBtn = () => {
         method: 'POST',
       });
     }
+    });
   }
 };
+
+function showUpdateQuestions(){
+rootRef.once('value', (snapshot) => {
+  root = snapshot.val();
+  const getCurriculum = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/instructor-curriculum-items/?page_size=1400&fields[chapter]=title,description,object_index&fields[lecture]=asset,title,is_published,description,is_downloadable,is_free,object_index,supplementary_assets&fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments&fields[practice]=title,is_published,object_index&fields[asset]=created,asset_type,content_summary,time_estimation,status,source_url,thumbnail_url,title,processing_errors,delayed_asset_message,body`, {
+    headers,
+  });
+  getCurriculum.then(resp => resp.json())
+  .then(resp => {
+  const $button = $(`
+    <form>
+      <label for='targetDatabase'>Choose Database: </label>
+      <select id='targetDatabase' name='targetDatabase'>
+         ${Object.keys(root).map((datab) => `<option value="${datab}">${datab}</option>`).join('')}
+      </select>
+      <label for='targetQuizz'>Choose Quizz: </label>
+      <select id='targetQuizz' name='targetQuizz' multiple>
+         ${resp.results.map((quizz) => `<option value="${quizz.id}">${quizz.title}</option>`).join('')}
+      </select>
+      
+    </form>
+<button id='updateQuesBtn'>Update Questions</button>
+    `);
+  $('.full-page-takeover-header--header--yZv70').after($button);
+  });
+});
+}
 $(document).on('click', '#startBtn', startBtnClick);
 $(document).on('click', '#updateQuesBtn', updateQuesBtn);
