@@ -103,11 +103,11 @@ const startBtnClick = () => {
       test.who_should_attend_data = data[0].who_should_attend_data;
       test.category_id = data[0].primary_category.id;
       test.description = data[0].description.replaceAllCus(oldKeyword, newKeyword);
-      test.headline = data[0].headline.replaceAllCus(oldKeyword, newKeyword);
+      test.headline = data[0].headline.substring(0,120).replaceAllCus(oldKeyword, newKeyword);
       test.instructional_level_id = 0;
       test.locale = data[0].locale.locale;
       test.subcategory_id = data[0].primary_subcategory.id;
-      test.title = data[0].title.replaceAllCus(oldKeyword, newKeyword);
+      test.title = data[0].title.substring(0,60).replaceAllCus(oldKeyword, newKeyword);
       test.price_money = {
         amount: data[0].base_price_detail.amount,
         currency: data[0].base_price_detail.currency,
