@@ -1,3 +1,9 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 String.prototype.replaceAllCus = function (strReplace, strWith) {
   // See http://stackoverflow.com/a/3561711/556609
   const esc = strReplace.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -20,13 +26,14 @@ firebase.initializeApp(firebaseConfig);
 const rootRef = firebase.database().ref();
 var courseId = -1;
 let root = {};
+const token = getCookie('access_token');
 
 var headers = {
   accept: 'application/json, text/plain, */*',
-  authorization: 'Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO',
+  authorization: `Bearer ${token}`,
   'content-type': 'application/json;charset=UTF-8',
   'x-requested-with': 'XMLHttpRequest',
-  'x-udemy-authorization': 'Bearer wi5fyVvaelI3TjaXun5fv5nuIXW3L6elebPkLElO',
+  'x-udemy-authorization': `Bearer ${token}`,
 };
 const isInCoursePage = /\/course\/\d+/.test(location.href);
 if (isInCoursePage) {
