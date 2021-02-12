@@ -211,7 +211,7 @@ const startBtnClick = () => {
         promises.push(createNewQuizzBonus);
       }
       Promise.all(promises)
-        .then(() => location.reload());
+        .then(() => alert('Done!!!'));
     });
 };
 const updateQuesBtn = () => {
@@ -233,7 +233,7 @@ const updateQuesBtn = () => {
     }
   }
   Promise.all(promises)
-  .then(() => location.reload());
+  .then(() => alert('Done!!!'));
 };
 
 function showUpdateQuestions(){
