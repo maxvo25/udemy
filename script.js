@@ -294,7 +294,7 @@ function cloneCourse(){
                     "question": e.prompt.question,
                     "correct_response": JSON.stringify([e.correct_response]),
                     "related_lecture": "",
-                    "explanation": e.prompt.explanation,
+                    "explanation": e.prompt.explanation || "",
                     "answers": JSON.stringify(e.prompt.answers),
                     "feedbacks": '["",""]',
                     "section": "",
