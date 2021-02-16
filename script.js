@@ -268,7 +268,7 @@ rootRef.once('value', (snapshot) => {
 
 function cloneCourse(){
   var courseId = $(document.body).data('clp-course-id');
-var json = {};
+  var courseTitle = $('title').text();
   var getCourseInformation1 = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
   });
@@ -287,8 +287,22 @@ var json = {};
     });
     Promise.all(promises).then((resp) => Promise.all(resp.map(p => p.json())))
     .then(resp => {
-        json.courseQues = resp.map(r => r.results);
-        firebase.database().ref().child(`clone`).set(json);
+        var push = resp.reduce((res, e) => {return res.concat(e.results)}, []);
+        let json =
+            push.map(e => {
+                return {
+                    "assessment_type": e.assessment_type,
+                    "question": e.prompt.question,
+                    "correct_response": JSON.stringify([e.correct_response]),
+                    "related_lecture": "",
+                    "explanation": e.prompt.explanation,
+                    "answers": JSON.stringify(e.prompt.answers),
+                    "feedbacks": '["",""]',
+                    "section": "",
+                    "section_name_map": "[]"
+                };
+            });
+        firebase.database().ref().child(`clone-${courseTitle}`).set(json);
     });
   });
 }
