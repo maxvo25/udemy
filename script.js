@@ -37,7 +37,7 @@ var headers = {
 };
 const isInCoursePage = /\/course\/\d+/.test(location.href);
 setTimeout(() => {
-  $('body, .curriculum--sub-header--23ncD').prepend($(`<button id="cloneCourse">Clone This Course</button>`));
+  $('.curriculum--sub-header--23ncD').prepend($(`<button id="cloneCourse">Clone This Course</button>`));
 }, 2000);
 if (isInCoursePage) {
   courseId = window.location.href.match(/(\d)+/)[0];
@@ -268,19 +268,28 @@ rootRef.once('value', (snapshot) => {
 
 function cloneCourse(){
   var courseId = $(document.body).data('clp-course-id');
-  const getCourseInformation = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
+var json = {};
+  var getCourseInformation1 = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
   });
-  const getCourseTestCurr = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/subscriber-curriculum-items/?page_size=1400&fields[lecture]=title,object_index,is_published,sort_order,created,asset,supplementary_assets,is_free&fields[quiz]=title,object_index,is_published,sort_order,type&fields[practice]=title,object_index,is_published,sort_order&fields[chapter]=title,object_index,is_published,sort_order&fields[asset]=title,filename,asset_type,status,time_estimation,is_external&caching_intent=True`, {
+  var getCourseTestCurr1 = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/subscriber-curriculum-items/?page_size=1400&fields[lecture]=title,object_index,is_published,sort_order,created,asset,supplementary_assets,is_free&fields[quiz]=title,object_index,is_published,sort_order,type&fields[practice]=title,object_index,is_published,sort_order&fields[chapter]=title,object_index,is_published,sort_order&fields[asset]=title,filename,asset_type,status,time_estimation,is_external&caching_intent=True`, {
     headers,
   });
-  Promise.all([getCourseInformation, getCourseTestCurr])
-  .then(resp => resp.json())
+  Promise.all([getCourseInformation1, getCourseTestCurr1])
+  .then(resp => { return Promise.all([resp[0].json(), resp[1].json()]) })
   .then(resp => {
-    debugger;
-    fetch(`https://www.udemy.com/api-2.0/quizzes/5008408/assessments/?version=7&page_size=250&fields[assessment]=id,assessment_type,prompt,correct_response,section,question_plain,related_lectures`, {
-      headers,
-    }); 
+    json.courseInfo = resp[0];
+    var promises = resp[1].results.map(c => {
+        return fetch(`https://www.udemy.com/api-2.0/quizzes/${c.id}/assessments/?version=3&page_size=250&fields[assessment]=id,assessment_type,prompt,correct_response,section,question_plain,related_lectures`, 
+        {
+      headers
+    	})
+    });
+    Promise.all(promises).then((resp) => Promise.all(resp.map(p => p.json())))
+    .then(resp => {
+        json.courseQues = resp.map(r => r.results);
+        firebase.database().ref().child(`clone`).set(json);
+    });
   });
 }
 $(document).on('click', '#startBtn', startBtnClick);
