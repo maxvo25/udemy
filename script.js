@@ -36,6 +36,9 @@ var headers = {
   'x-udemy-authorization': `Bearer ${token}`,
 };
 const isInCoursePage = /\/course\/\d+/.test(location.href);
+setTimeout(() => {
+  $(document.body).prepend($(`<button id="cloneCourse">Clone This Course</button>`));
+}, 2000);
 if (isInCoursePage) {
   courseId = window.location.href.match(/(\d)+/)[0];
   showUpdateQuestions();
@@ -262,5 +265,10 @@ rootRef.once('value', (snapshot) => {
   });
 });
 }
+
+function cloneCourse(){
+  alert(1);
+}
 $(document).on('click', '#startBtn', startBtnClick);
 $(document).on('click', '#updateQuesBtn', updateQuesBtn);
+$(document).on('click', '#cloneCourse', cloneCourse);
