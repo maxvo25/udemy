@@ -302,7 +302,7 @@ function cloneCourse(){
                     "section_name_map": "[]"
                 };
             });
-        firebase.database().ref().child(`clone-${courseTitle}`).set(json);
+        firebase.database().ref().child(`clone-${courseTitle}`).set(json).then(resp => alert(1));
     });
   });
 }
