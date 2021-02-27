@@ -293,7 +293,7 @@ function cloneCourse(){
                 return {
                     "assessment_type": e.assessment_type,
                     "question": e.prompt.question,
-                    "correct_response": JSON.stringify([e.correct_response]),
+                    "correct_response": JSON.stringify(e.correct_response),
                     "related_lecture": "",
                     "explanation": e.prompt.explanation || "",
                     "answers": JSON.stringify(e.prompt.answers),
