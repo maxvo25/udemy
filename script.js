@@ -278,8 +278,9 @@ function cloneCourse(){
   Promise.all([getCourseInformation1, getCourseTestCurr1])
   .then(resp => { return Promise.all([resp[0].json(), resp[1].json()]) })
   .then(resp => {
-    var promises = resp[1].results.map(c => {
-        return fetch(`https://www.udemy.com/api-2.0/quizzes/${c.id}/assessments/?version=3&page_size=250&fields[assessment]=id,assessment_type,prompt,correct_response,section,question_plain,related_lectures`, 
+    var versions = [15, 12, 10, 22, 1]
+    var promises = resp[1].results.map((c, i) => {
+        return fetch(`https://www.udemy.com/api-2.0/quizzes/${c.id}/assessments/?version=${versions[i]}&page_size=250&fields[assessment]=id,assessment_type,prompt,correct_response,section,question_plain,related_lectures`, 
         {
       headers
     	})
