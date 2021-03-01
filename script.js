@@ -82,6 +82,9 @@ if (isInCoursePage) {
     $(document).ready(function(){
     $('.courses--header--38vYX').after($button);
     });
+    document.addEventListener("DOMContentLoaded", function(event){
+  $('.courses--header--38vYX').after($button);
+});
       setTimeout(() => {
         
       }, 1000);
