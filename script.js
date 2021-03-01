@@ -71,13 +71,13 @@ if (isInCoursePage) {
     .then((resp) => {
       const $button = $(`
     <form>
-      <input id='newKeyword'  type='text' placeholder='Input New Key Word' />
+      <input id='oldKeyword'  type='text' placeholder='Input Old Key Word' />
       <label for='targetCourse'>Choose Course: </label>
-      <select id='targetCourse' name='targetCourse' multiple>
+      <select id='targetCourse' name='targetCourse'>
         ${resp.results.map((course) => `<option value="${course.id}">${course.title}</option>`).join('')}
       </select>
     </form>
-    <button id='startBtn'>Start</button>
+    <button id='listenNewCourse'>Listen For New Course</button>
     `);
       setTimeout(() => {
         $('.courses--header--38vYX').after($button);
@@ -239,6 +239,179 @@ const updateQuesBtn = () => {
   .then(() => alert('Done!!!'));
 };
 
+function listenNewCourse(){
+const NewCourseRef = firebase.database().ref('NewUdemyCourse');
+NewCourseRef.on('value', (snapshot) => {
+  var newCourse = snapshot.val();
+  fetch("https://www.udemy.com/api-2.0/courses/", {
+    headers,
+    body: {
+      is_practice_test_course: true, 
+      title: "New Course", 
+      intended_category_id: "294"
+    },
+    method: 'POST'
+})
+  .then(resp => resp.json())
+  .then(resp => {
+    debugger;
+  const targetCourse = $('#targetCourse').val();
+  const oldKeyword = $('#oldKeyword').val();
+  const newKeyword = newCourse.newKeyWord;
+  const isCreateTestTemplate = true;
+  const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
+    headers,
+  });
+  const fetchMessage = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/course-messages/`, {
+    headers,
+  });
+  Promise.all([fetchCourseInfo, fetchMessage])
+    .then((data) => Promise.all([data[0].json(), data[1].json()]))
+    .then((data) => {
+      const test = {};
+      for (var i = 0; i < data[0].requirements_data.items.length; i++) {
+        data[0].requirements_data.items[i] = data[0].requirements_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+      }
+      test.requirements_data = data[0].requirements_data;
+      for (var i = 0; i < data[0].what_you_will_learn_data.items.length; i++) {
+        data[0].what_you_will_learn_data.items[i] = data[0].what_you_will_learn_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+      }
+      test.what_you_will_learn_data = data[0].what_you_will_learn_data;
+      for (var i = 0; i < data[0].who_should_attend_data.items.length; i++) {
+        data[0].who_should_attend_data.items[i] = data[0].who_should_attend_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+      }
+      test.who_should_attend_data = data[0].who_should_attend_data;
+      test.category_id = data[0].primary_category.id;
+      test.description = data[0].description.replaceAllCus(oldKeyword, newKeyword);
+      test.headline = data[0].headline.replaceAllCus(oldKeyword, newKeyword).substring(0,120);
+      test.instructional_level_id = 0;
+      test.locale = data[0].locale.locale;
+      test.subcategory_id = data[0].primary_subcategory.id;
+      test.title = data[0].title.replaceAllCus(oldKeyword, newKeyword).substring(0,60);
+      test.price_money = {
+        amount: data[0].base_price_detail.amount,
+        currency: data[0].base_price_detail.currency,
+      };
+
+
+      const welcome = {
+        content: data[1].results[1].content,
+        errors_only: true,
+        message_type: 'welcome',
+      };
+      const complete = {
+        content: data[1].results[0].content,
+        errors_only: true,
+        message_type: 'complete',
+      };
+      const message = [welcome, complete];
+
+      const coursePromotion = {
+        'code': "CODING4INTERVIEW1",
+        'discount_strategy': "long_discount",
+        'discount_value': 12.99
+      };
+      const quizz = {
+        description: '<p>Since there are too many MCQ and I can not add an explanation for each of them. So, If you do have questions about it, there are 3 ways to reach me:</p><p>1. Post your question to the course discussion area</p><p>2. Message me with your question (include the course name and lecture number).</p><p>3. Fill this question form (Your email address is not required to fill out the form, but if you want me to reply to you I will need it)</p><p>https://forms.gle/KhQjq6otNYYcmpPt5</p><p><br></p><p>PS: Don\'t forget to check out my website to get my course for <strong>FREE</strong></p><p>TheCrackingCodingInterview.com</p>',
+        duration: 2400,
+        is_randomized: true,
+        pass_percent: 70,
+        type: 'practice-test',
+      };
+      const quizzBonus = {
+        description: '<p>Please don’t forget to post a review, your review is very important to me. please take 30 seconds to post your rating and write a few words. Maybe you let me know if my efforts to upgrade the course were justified. I will truly appreciate it. </p>',
+        duration: 2400,
+        is_randomized: false,
+        pass_percent: 70,
+        title: 'Get Your BONUS HERE (visit TheCrackingCodingInterview.com to have more Detail)',
+        type: 'practice-test',
+      };
+      const quizzBonusQues = {
+        assessment_type: 'multi-select',
+        question: "<p><strong>Congratulations for making it to the end!</strong></p><p>Since you're here, you're serious about learning. I would like to offer you the option to <strong>choose any of my courses for only $12.99</strong>.</p><p><br></p><p>Go to my website to know more about other courses and get the CHEAPEST&nbsp;PRICE</p><pre class=\"prettyprint linenums\">thecrackingcodinginterview.com</pre><p>Or use the coupon code below to get the <strong>$12.99</strong> price on checkout.</p><pre class=\"prettyprint linenums\">CODING4INTERVIEW1</pre><p><br></p><p><strong>How to access the SPECIAL&nbsp;BONUS</strong></p><p>Resource URL: https://thecrackingcodinginterview.com/thankyou</p><p><br></p><p>Please don’t forget to post reviews, your review is very important to me. please take 30 seconds to post your rating and write a few words. maybe you let me know if my efforts to upgrade the course were justified. I will truly appreciate it. </p>",
+        correct_response: '["a","b"]',
+        related_lecture: '',
+        explanation: '',
+        answers: "[\"<p>Go to the link above to view the resources</p>\",\"<p>Check all options to finish this test. Please don't hesitate to contact me if you have any questions</p>\"]",
+        feedbacks: '["",""]',
+        section: '',
+        section_name_map: '[]',
+      };
+
+      const updateCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/`, {
+        headers,
+        body: JSON.stringify(test),
+        method: 'PATCH',
+      });
+      const updateCourseMessage = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/course-messages/`, {
+        headers,
+        body: JSON.stringify(message),
+        method: 'POST',
+      });
+      const updateCoursePromotion = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/coupons-v2/`, {
+        headers,
+        body: JSON.stringify(coursePromotion),
+        method: 'POST',
+      });
+      const promises = [updateCourseInfo, updateCourseMessage, updateCoursePromotion];
+      if (isCreateTestTemplate) {
+        const createNewQuizzBonus = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+          headers,
+          body: JSON.stringify(quizzBonus),
+          method: 'POST',
+        }).then((resp) => resp.json())
+          .then((resp) => {
+            const createNewQuizzQues = fetch(`https://www.udemy.com/api-2.0/quizzes/${resp.id}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+              headers,
+              body: JSON.stringify(quizzBonusQues),
+              method: 'POST',
+            });
+            return createNewQuizzQues;
+          });
+        createNewQuizzBonus.then(() => {
+          const subpromises = [];
+          for (let i = 5; i > 0; i--) {
+            quizz.title = `${newKeyword} Practice Test ${i}`;
+            const createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
+              headers,
+              body: JSON.stringify(quizz),
+              method: 'POST',
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+              debugger;
+  const targetDatabase = newCourse.questions;
+  const targetQuizz = $('#targetQuizz').val();
+  const step = Math.round(root[targetDatabase].length / targetQuizz.length);
+  var promises = [];
+  for (let i = 0; i < targetQuizz.length; i++) {
+    
+    var j = i * step;
+    var max = (i + 1) * step;
+    for (; j < max; j++) {
+      var promise = fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz[i]}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+        headers,
+        body: JSON.stringify(root[targetDatabase][j]),
+        method: 'POST',
+      });
+      promises.push(promise);
+    }
+  }
+  return Promise.all(promises);
+            });
+            subpromises.push(createNewQuizz);
+          }
+          return Promise.all(subpromises);
+        });
+        promises.push(createNewQuizzBonus);
+      }
+      Promise.all(promises)
+        .then(() => alert('Done!!!'));
+    });
+  })
+  
+});
+}
 function showUpdateQuestions(){
 rootRef.once('value', (snapshot) => {
   root = snapshot.val();
@@ -309,3 +482,5 @@ function cloneCourse(){
 $(document).on('click', '#startBtn', startBtnClick);
 $(document).on('click', '#updateQuesBtn', updateQuesBtn);
 $(document).on('click', '#cloneCourse', cloneCourse);
+$(document).on('click', '#listenNewCourse', listenNewCourse);
+
