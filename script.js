@@ -251,11 +251,11 @@ NewCourseRef.on('value', (snapshot) => {
   var newCourse = snapshot.val();
   fetch("https://www.udemy.com/api-2.0/courses/", {
     headers,
-    body: {
+    body: JSON.stringify({
       is_practice_test_course: true, 
       title: "New Course", 
       intended_category_id: "294"
-    },
+    }),
     method: 'POST'
 })
   .then(resp => resp.json())
