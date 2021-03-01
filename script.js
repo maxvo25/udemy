@@ -79,8 +79,11 @@ if (isInCoursePage) {
     </form>
     <button id='listenNewCourse'>Listen For New Course</button>
     `);
+    $(document).ready(function(){
+    $('.courses--header--38vYX').after($button);
+    });
       setTimeout(() => {
-        $('.courses--header--38vYX').after($button);
+        
       }, 1000);
     });
 }
