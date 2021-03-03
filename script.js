@@ -381,7 +381,7 @@ function listenNewCourse(){
         createNewQuizzBonus.then(() => {
           var subpromises = [];
           for (let i = 5; i > 0; i--) {
-            quizz.title = `${newKeyword[1]} Practice Test ${i}`;
+            quizz.title = `${newKeyword[1]} Practice Test`;
             quizz.duration = step * 60;
             const createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
               headers,
