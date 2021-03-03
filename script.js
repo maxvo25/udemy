@@ -405,7 +405,7 @@ function listenNewCourse(){
       
       Promise.all(promises)
         .then(() => alert('Done!!!'));
-    });
+    })}});
   
 }
 
