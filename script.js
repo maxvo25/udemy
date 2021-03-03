@@ -69,6 +69,7 @@ if (isInCoursePage) {
       }, 1000);
     });
 } else {
+  rootRef.once('value', (snapshot) => {
   fetch('https://www.udemy.com/api-2.0/users/me/taught-courses/?page=1&page_size=100&ordering=-created&skip_caching=true&fields[course]=title', {
     headers,
   }).then((resp) => resp.json())
@@ -90,12 +91,7 @@ if (isInCoursePage) {
     $(document).ready(function(){
     $('.courses--header--38vYX').after($button);
     });
-    document.addEventListener("DOMContentLoaded", function(event){
-  $('.courses--header--38vYX').after($button);
-});
-      setTimeout(() => {
-        
-      }, 1000);
+    });
     });
 }
 const startBtnClick = () => {
