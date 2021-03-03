@@ -245,7 +245,7 @@ const updateQuesBtn = () => {
   .then(() => alert('Done!!!'));
 };
 
-
+function listenNewCourse(){
 const NewCourseRef = firebase.database().ref('NewUdemyCourse');
 NewCourseRef.on('value', (snapshot) => {
   var newCourse = snapshot.val();
@@ -261,6 +261,7 @@ NewCourseRef.on('value', (snapshot) => {
   .then(resp => resp.json())
   .then(resp => {
     debugger;
+    const courseId = resp.id;
   const targetCourse = '3878660';
   const oldKeyword = 'SnowPro';
   const newKeyword = newCourse.newKeyWord;
@@ -417,6 +418,7 @@ NewCourseRef.on('value', (snapshot) => {
   })
   
 });
+}
 
 function showUpdateQuestions(){
 rootRef.once('value', (snapshot) => {
