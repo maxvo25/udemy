@@ -35,6 +35,10 @@ var headers = {
   'x-requested-with': 'XMLHttpRequest',
   'x-udemy-authorization': `Bearer ${token}`,
 };
+
+rootRef.once('value', (snapshot) => {
+  root = snapshot.val();
+});
 const isInCoursePage = /\/course\/\d+/.test(location.href);
 setTimeout(() => {
   $('.curriculum--sub-header--23ncD').prepend($(`<button id="cloneCourse">Clone This Course</button>`));
@@ -75,6 +79,10 @@ if (isInCoursePage) {
       <label for='targetCourse'>Choose Course: </label>
       <select id='targetCourse' name='targetCourse'>
         ${resp.results.map((course) => `<option value="${course.id}">${course.title}</option>`).join('')}
+      </select>
+      <label for='targetDatabase'>Choose Database: </label>
+      <select id='targetDatabase' name='targetDatabase'>
+         ${Object.keys(root).map((datab) => `<option value="${datab}">${datab + ' - ' + root[datab].length + ' Questions'}</option>`).join('')}
       </select>
     </form>
     <button id='listenNewCourse'>Listen For New Course</button>
@@ -246,9 +254,9 @@ const updateQuesBtn = () => {
 };
 
 function listenNewCourse(){
-const NewCourseRef = firebase.database().ref('NewUdemyCourse');
-NewCourseRef.on('value', (snapshot) => {
-  var newCourse = snapshot.val();
+    const targetDatabase = $('#targetDatabase').val();
+  const numQuiz = 5;
+  const step = Math.round(root[targetDatabase].length / numQuiz);
   fetch("https://www.udemy.com/api-2.0/courses/", {
     headers,
     body: JSON.stringify({
@@ -263,10 +271,10 @@ NewCourseRef.on('value', (snapshot) => {
     debugger;
     const courseId = resp.id;
   const targetCourse = '3878660';
-  const oldKeyword = 'SnowPro';
-  const newKeyword = newCourse.newKeyWord;
+  const oldKeyword = ['[short name]', '[certificate name]', '[number question]'];
+  const newKeyword = $('oldKeyword').val().split('|').push(step);
   const isCreateTestTemplate = true;
-  const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
+  const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_+detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
   });
   const fetchMessage = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/course-messages/`, {
@@ -277,24 +285,24 @@ NewCourseRef.on('value', (snapshot) => {
     .then((data) => {
       const test = {};
       for (var i = 0; i < data[0].requirements_data.items.length; i++) {
-        data[0].requirements_data.items[i] = data[0].requirements_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+        data[0].requirements_data.items[i] = data[0].requirements_data.items[i].replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]);
       }
       test.requirements_data = data[0].requirements_data;
       for (var i = 0; i < data[0].what_you_will_learn_data.items.length; i++) {
-        data[0].what_you_will_learn_data.items[i] = data[0].what_you_will_learn_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+        data[0].what_you_will_learn_data.items[i] = data[0].what_you_will_learn_data.items[i].replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]);
       }
       test.what_you_will_learn_data = data[0].what_you_will_learn_data;
       for (var i = 0; i < data[0].who_should_attend_data.items.length; i++) {
-        data[0].who_should_attend_data.items[i] = data[0].who_should_attend_data.items[i].replaceAllCus(oldKeyword, newKeyword);
+        data[0].who_should_attend_data.items[i] = data[0].who_should_attend_data.items[i].replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]);
       }
       test.who_should_attend_data = data[0].who_should_attend_data;
       test.category_id = data[0].primary_category.id;
-      test.description = data[0].description.replaceAllCus(oldKeyword, newKeyword);
-      test.headline = data[0].headline.replaceAllCus(oldKeyword, newKeyword).substring(0,120);
+      test.description = data[0].description.replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]).replaceAll(oldKeyword[2], newKeyword[2]);
+      test.headline = data[0].headline.replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]).substring(0,120);
       test.instructional_level_id = 0;
       test.locale = data[0].locale.locale;
       test.subcategory_id = data[0].primary_subcategory.id;
-      test.title = data[0].title.replaceAllCus(oldKeyword, newKeyword).substring(0,60);
+      test.title = data[0].title.replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]).substring(0,60);
       test.price_money = {
         amount: data[0].base_price_detail.amount,
         currency: data[0].base_price_detail.currency,
@@ -387,37 +395,18 @@ NewCourseRef.on('value', (snapshot) => {
             .then(resp => resp.json())
             .then(resp => {
               debugger;
-  const targetDatabase = newCourse.questions;
-  const targetQuizz = $('#targetQuizz').val();
-  const step = Math.round(root[targetDatabase].length / targetQuizz.length);
-  var promises = [];
-  for (let i = 0; i < targetQuizz.length; i++) {
-    
-    var j = i * step;
-    var max = (i + 1) * step;
-    for (; j < max; j++) {
-      var promise = fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz[i]}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
+  const targetQuizz = resp.id;
+      var promise = fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
         headers,
-        body: JSON.stringify(root[targetDatabase][j]),
+        body: JSON.stringify(root[targetDatabase].splice(0, step)),
         method: 'POST',
       });
-      promises.push(promise);
-    }
-  }
-  return Promise.all(promises);
-            });
-            subpromises.push(createNewQuizz);
-          }
-          return Promise.all(subpromises);
-        });
         promises.push(createNewQuizzBonus);
-      }
+      
       Promise.all(promises)
         .then(() => alert('Done!!!'));
     });
-  })
   
-});
 }
 
 function showUpdateQuestions(){
