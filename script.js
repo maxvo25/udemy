@@ -300,8 +300,8 @@ function listenNewCourse(){
       test.subcategory_id = data[0].primary_subcategory.id;
       test.title = data[0].title.replaceAll(oldKeyword[0], newKeyword[0]).replaceAll(oldKeyword[1], newKeyword[1]).substring(0,60);
       test.price_money = {
-        amount: data[0].base_price_detail.amount,
-        currency: data[0].base_price_detail.currency,
+        amount: (data[0].base_price_detail && data[0].base_price_detail.amount) || '99',
+        currency: (data[0].base_price_detail && data[0].base_price_detail.currency) || 'USD',
       };
 
 
