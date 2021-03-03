@@ -266,7 +266,7 @@ function listenNewCourse(){
   .then(resp => {
     debugger;
     const courseId = resp.id;
-  const targetCourse = '3878660';
+  const targetCourse = $('#targetCourse').val();
   const oldKeyword = ['[short name]', '[certificate name]', '[number question]'];
   const newKeyword = $('#oldKeyword').val().split('|').push(root[targetDatabase].length);
   const isCreateTestTemplate = true;
