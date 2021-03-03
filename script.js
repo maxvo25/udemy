@@ -401,11 +401,7 @@ function listenNewCourse(){
         body: JSON.stringify(root[targetDatabase].splice(0, step)),
         method: 'POST',
       });
-        promises.push(createNewQuizzBonus);
-      
-      Promise.all(promises)
-        .then(() => alert('Done!!!'));
-    })}});
+        })}})}})});
   
 }
 
