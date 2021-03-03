@@ -250,7 +250,7 @@ const updateQuesBtn = () => {
 };
 
 function listenNewCourse(){
-  const max = 500;
+  const max = 750;
     const targetDatabase = $('#targetDatabase').val();
   const numQuiz = 5;
   if(root[targetDatabase].length > max)
