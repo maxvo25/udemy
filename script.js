@@ -250,8 +250,11 @@ const updateQuesBtn = () => {
 };
 
 function listenNewCourse(){
+  const max = 500;
     const targetDatabase = $('#targetDatabase').val();
   const numQuiz = 5;
+  if(root[targetDatabase].length > max)
+      root[targetDatabase] = root[targetDatabase].splice(0, max);
   const step = Math.round(root[targetDatabase].length / numQuiz);
   fetch("https://www.udemy.com/api-2.0/courses/", {
     headers,
