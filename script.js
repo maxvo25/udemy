@@ -268,7 +268,7 @@ function listenNewCourse(){
     const courseId = resp.id;
   const targetCourse = '3878660';
   const oldKeyword = ['[short name]', '[certificate name]', '[number question]'];
-  const newKeyword = $('#oldKeyword').val().split('|').push(step);
+  const newKeyword = $('#oldKeyword').val().split('|').push(root[targetDatabase].length);
   const isCreateTestTemplate = true;
   const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_+detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
@@ -382,7 +382,7 @@ function listenNewCourse(){
         createNewQuizzBonus.then(() => {
           const subpromises = [];
           for (let i = 5; i > 0; i--) {
-            quizz.title = `${newKeyword} Practice Test ${i}`;
+            quizz.title = `${newKeyword[1]} Practice Test ${i}`;
             const createNewQuizz = fetch(`https://www.udemy.com/api-2.0/courses/${courseId}/quizzes/?fields[quiz]=description,duration,title,type,is_published,object_index,pass_percent,is_draft,requires_draft,is_randomized,num_assessments`, {
               headers,
               body: JSON.stringify(quizz),
@@ -392,9 +392,11 @@ function listenNewCourse(){
             .then(resp => {
               debugger;
   const targetQuizz = resp.id;
+              const questions = root[targetDatabase].splice(0, step);
+              for(var i=0; i<questions.length; i++)
       var promise = fetch(`https://www.udemy.com/api-2.0/quizzes/${targetQuizz}/assessments/?draft=false&fields[assessment]=assessment_type,prompt,correct_response,section`, {
         headers,
-        body: JSON.stringify(root[targetDatabase].splice(0, step)),
+        body: JSON.stringify(questions[i]),
         method: 'POST',
       });
         })}})}})});
