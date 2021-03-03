@@ -268,7 +268,7 @@ function listenNewCourse(){
     const courseId = resp.id;
   const targetCourse = '3878660';
   const oldKeyword = ['[short name]', '[certificate name]', '[number question]'];
-  const newKeyword = $('oldKeyword').val().split('|').push(step);
+  const newKeyword = $('#oldKeyword').val().split('|').push(step);
   const isCreateTestTemplate = true;
   const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_+detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
     headers,
