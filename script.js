@@ -387,7 +387,7 @@ function listenNewCourse(){
               headers,
               body: JSON.stringify(quizz),
               method: 'POST',
-            });
+            })
             
             .then(resp => resp.json())
             .then(resp => {
