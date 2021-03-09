@@ -49,13 +49,10 @@ var headers = {
   'x-udemy-authorization': `Bearer ${token}`,
 };
 
-firebase.database().ref('New Udemy Course').on('value', (snapshot) => {
-  var newCourse = snapshot.val();
-  listenNewCourse(newCourse.keywords, newCourse.dbName);
-});
-
 rootRef.on('value', (snapshot) => {
   root = snapshot.val();
+  if(root['New Udemy Course'])
+    listenNewCourse(newCourse.keywords, newCourse.dbName);
 });
 
 const isInCoursePage = /\/course\/\d+/.test(location.href);
