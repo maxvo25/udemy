@@ -1,3 +1,5 @@
+const targetCourse = '3855266';
+
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -36,9 +38,15 @@ var headers = {
   'x-udemy-authorization': `Bearer ${token}`,
 };
 
-rootRef.once('value', (snapshot) => {
+firebase.database().ref('New Udemy Course').on('value', (snapshot) => {
+  var newCourse = snapshot.val();
+  listenNewCourse(newCourse.keywords, newCourse.dbName);
+});
+
+rootRef.on('value', (snapshot) => {
   root = snapshot.val();
 });
+
 const isInCoursePage = /\/course\/\d+/.test(location.href);
 setTimeout(() => {
   $('.curriculum--sub-header--23ncD').prepend($(`<button id="cloneCourse">Clone This Course</button>`));
@@ -249,9 +257,9 @@ const updateQuesBtn = () => {
   .then(() => alert('Done!!!'));
 };
 
-function listenNewCourse(){
+function listenNewCourse(keyword, targetDatabase){
+  var newKeyword = keyword.split('|');
   const max = 750;
-    const targetDatabase = $('#targetDatabase').val();
   const numQuiz = 5;
   if(root[targetDatabase].length > max)
       root[targetDatabase] = root[targetDatabase].splice(0, max);
@@ -268,9 +276,7 @@ function listenNewCourse(){
   .then(resp => resp.json())
   .then(resp => {
     const courseId = resp.id;
-  const targetCourse = $('#targetCourse').val();
   const oldKeyword = ['[short name]', '[certificate name]', '[number question]'];
-  var newKeyword = $('#oldKeyword').val().split('|');
     newKeyword.push(root[targetDatabase].length);
   const isCreateTestTemplate = true;
   const fetchCourseInfo = fetch(`https://www.udemy.com/api-2.0/courses/${targetCourse}/?fields[course]=base_price_+detail,requirements_data,what_you_will_learn_data,who_should_attend_data,title,headline,description,locale,instructional_level_id,primary_category,primary_subcategory,all_course_has_labels,image_750x422,promo_asset,intended_category,category_locked,label_locked,category_applicable,label_applicable,min_summary_words,landing_preview_as_guest_url,&fields[course_label]=@min,versions`, {
