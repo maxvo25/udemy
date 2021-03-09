@@ -53,8 +53,8 @@ rootRef.on('value', (snapshot) => {
   root = snapshot.val();
   if(root['New Udemy Course']){
     var newCourse = root['New Udemy Course'];
+    rootRef.child('New Udemy Course').set(null);
     listenNewCourse(newCourse.keywords, newCourse.dbName);
-    
   }
 });
 
