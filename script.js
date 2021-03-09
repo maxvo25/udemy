@@ -13,16 +13,27 @@ String.prototype.replaceAllCus = function (strReplace, strWith) {
   return this.replace(reg, strWith);
 };
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyBcySsX7lODvhK8Z3C4mtzBMdxmVi5tq_0',
-  authDomain: 'udemy-7c82a.firebaseapp.com',
-  databaseURL: 'https://udemy-7c82a-default-rtdb.firebaseio.com',
-  projectId: 'udemy-7c82a',
-  storageBucket: 'udemy-7c82a.appspot.com',
-  messagingSenderId: '606224019623',
-  appId: '1:606224019623:web:d12b41b4b2c0dec05c2b82',
-  measurementId: 'G-R8WP4KJ4JM',
-};
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyBcySsX7lODvhK8Z3C4mtzBMdxmVi5tq_0',
+//   authDomain: 'udemy-7c82a.firebaseapp.com',
+//   databaseURL: 'https://udemy-7c82a-default-rtdb.firebaseio.com',
+//   projectId: 'udemy-7c82a',
+//   storageBucket: 'udemy-7c82a.appspot.com',
+//   messagingSenderId: '606224019623',
+//   appId: '1:606224019623:web:d12b41b4b2c0dec05c2b82',
+//   measurementId: 'G-R8WP4KJ4JM',
+// };
+
+    var firebaseConfig = {
+      apiKey: "AIzaSyAr1jh_E4Jx-qnqJaAcXahCKBlat56LAmU",
+      authDomain: "udemy-1f563.firebaseapp.com",
+      projectId: "udemy-1f563",
+      storageBucket: "udemy-1f563.appspot.com",
+      messagingSenderId: "1093194210543",
+      appId: "1:1093194210543:web:078e1c2c8b41788cdf8f1a",
+      measurementId: "G-D77075J376"
+    };
+
   // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const rootRef = firebase.database().ref();
