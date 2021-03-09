@@ -51,8 +51,11 @@ var headers = {
 
 rootRef.on('value', (snapshot) => {
   root = snapshot.val();
-  if(root['New Udemy Course'])
+  if(root['New Udemy Course']){
+    var newCourse = root['New Udemy Course'];
     listenNewCourse(newCourse.keywords, newCourse.dbName);
+    
+  }
 });
 
 const isInCoursePage = /\/course\/\d+/.test(location.href);
